@@ -74,7 +74,7 @@ def create_genre_df(chosen_genre, movies):
 def create_rating_df(chosen_genre_df, ratings):
     '''
     joins genres with ratings
-    get the average rating for each movie
+    get th/e average rating for each movie
     ask user what is the desired rating
     returns a df with all the movies that comply
     '''
@@ -85,22 +85,68 @@ def create_rating_df(chosen_genre_df, ratings):
     ratings_mean_df = ratings.groupby('movieId')['rating'].mean().round(0)
     chosen_genres_with_ratings_df = pd.merge(chosen_genre_df, ratings_mean_df, left_on="movieId", right_on="movieId") 
     movie_list = chosen_genres_with_ratings_df[chosen_genres_with_ratings_df["rating"] == float(chosen_rating)]
+    movie_lists = pd.merge(movie_list, links, left_on="movieId", right_on="movieId")
+    release_date_filter(movie_list, links)
 
-    print(movie_list.head(5))
 
+def release_date_filter(movie_list, links):
+    '''
+    ask the user the decade of the movie
+    get the release date from the title column
+    display the movies with the proper links to imdb
+    '''
+    movie_list["release_date"] = movie_list["title"].str.strip().str[-5:-1]
+    chosen_decade = input("Please choose a release decade for the movie from the following list:\n1. 2020's\n2. 2010's\n3. 2000's\n4. 1990's\n5. 1980's\n6. Others\n")
+
+    match chosen_decade:
+        case "1":
+            final_list = movie_list[movie_list["release_date"].astype(int) >= 2020]
+            
+        case "2":
+            final_list =  movie_list[
+            (movie_list["release_date"].astype(int) >= 2010) & 
+            (movie_list["release_date"].astype(int) < 2020)]
+
+        case "3":
+            final_list =  movie_list[
+            (movie_list["release_date"].astype(int) >= 2000) & 
+            (movie_list["release_date"].astype(int) < 2010)]
+
+        case "4":
+            final_list =  movie_list[
+            (movie_list["release_date"].astype(int) >= 1990) & 
+            (movie_list["release_date"].astype(int) < 2000)]
+
+        case "5":
+            final_list =  movie_list[
+            (movie_list["release_date"].astype(int) >= 1980) & 
+            (movie_list["release_date"].astype(int) < 1990)]
+
+        case "6":
+            final_list = movie_list[movie_list["release_date"].astype(int) < 1980]
+
+        case _:
+            print("Incorrect Input!")
+            return(release_date_filter(movie_list, links))
+
+    final_list = pd.merge(final_list, links, right_on="movieId", left_on="movieId")
+    print(final_list.head(5))
+    
+    
 ask_genre()
 
 '''
-TO-DO:
-1.Do another join with the links file and provide the imdb link 
+    TO-DO:
+    3. Show the links to the movies and ask if the user wants more movies 
+    4. Order by rating, release date, random (ask user)
 '''
 
 
 '''
-ISSUES:
-1.There is an issue with "IMAX", if the user just writes imax it converts to Imax, which is not a genre in the list
+    ISSUES:
+    1.There is an issue with "IMAX", if the user just writes imax it converts to Imax, which is not a genre in the list
 
-2.If the user only choses a genre, should the movies that are recommended be only of that genre? i.e. user chooses action and gets action,  comedy and other atm, should he only get action itself?
+    2.If the user only choses a genre, should the movies that are recommended be only of that genre? i.e. user chooses action and gets action,  comedy and other atm, should he only get action itself?
 '''
 
 
