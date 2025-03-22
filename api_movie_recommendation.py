@@ -33,7 +33,7 @@ def ask_genre(genre_list, genre_dict):
 def get_movie_list(chosen_genre, genre_dict):
     chosen_genre_id = genre_dict.keys()
     print(chosen_genre_id)
-    #movies_filtered_by_genre_url = f'https://api.themoviedb.org/3/discover/movie?genre_id={genre_id}'
+    movies_filtered_by_genre_url = f'https://api.themoviedb.org/3/discover/movie?genre_id={genre_id}'
 
 
 
