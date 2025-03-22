@@ -29,11 +29,11 @@ links = pd.read_csv("~/Desktop/projects/movie_recommendation/ml-32m/links.csv")
 def ask_genre():
     '''
     the movies csv file contains the following:
-    1. movieId
+    1. movieid
     2. title
     3. genres
     '''
-    movies = pd.read_csv("~/Desktop/projects/movie_recommendation/ml-32m/movies.csv")
+    movies = pd.read_csv("~/desktop/projects/movie_recommendation/ml-32m/movies.csv")
     #print(movies.head())
     '''
     this part gets all the genres of all the movies listed,
@@ -48,11 +48,11 @@ def ask_genre():
 
     genre_list = sorted(set(genre_list_unsorted))
     genre_list.pop(0) #this just removes the "no genres"
-    chosen_genre = input(f"Please choose a genre from the following list:\n{genre_list}\n")
+    chosen_genre = input(f"please choose a genre from the following list:\n{genre_list}\n")
     chosen_genre = sorted(chosen_genre.title().split(" "))
     for genre in chosen_genre:
         if genre not in genre_list:
-            print(f"{genre} is not in the list. Please choose a genre from the following list:\n{genre_list}\n")
+            print(f"{genre} is not in the list. please choose a genre from the following list:\n{genre_list}\n")
             return(ask_genre())
     create_genre_df(chosen_genre, movies)
 
@@ -67,7 +67,6 @@ def create_genre_df(chosen_genre, movies):
         print(f"There are no movies with all the specified genres. Removing {chosen_genre[-1]}")
         chosen_genre.pop()
         create_genre_df(chosen_genre, movies)
-    #print(chosen_genre_df.head(20))
     create_rating_df(chosen_genre_df, ratings)
     
 
@@ -85,7 +84,8 @@ def create_rating_df(chosen_genre_df, ratings):
     ratings_mean_df = ratings.groupby('movieId')['rating'].mean().round(0)
     chosen_genres_with_ratings_df = pd.merge(chosen_genre_df, ratings_mean_df, left_on="movieId", right_on="movieId") 
     movie_list = chosen_genres_with_ratings_df[chosen_genres_with_ratings_df["rating"] == float(chosen_rating)]
-    movie_lists = pd.merge(movie_list, links, left_on="movieId", right_on="movieId")
+    movie_list = pd.merge(movie_list, links, left_on="movieId", right_on="movieId")
+    print(movie_list.head(5))
     release_date_filter(movie_list, links)
 
 
@@ -96,6 +96,7 @@ def release_date_filter(movie_list, links):
     display the movies with the proper links to imdb
     '''
     movie_list["release_date"] = movie_list["title"].str.strip().str[-5:-1]
+    print(movie_list.head(5))
     chosen_decade = input("Please choose a release decade for the movie from the following list:\n1. 2020's\n2. 2010's\n3. 2000's\n4. 1990's\n5. 1980's\n6. Others\n")
 
     match chosen_decade:
@@ -130,7 +131,7 @@ def release_date_filter(movie_list, links):
             return(release_date_filter(movie_list, links))
 
     final_list = pd.merge(final_list, links, right_on="movieId", left_on="movieId")
-    print(final_list.head(5))
+    print(final_list.head(50))
     
     
 ask_genre()
