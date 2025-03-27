@@ -101,7 +101,7 @@ get_genre_list()
 
 '''
 TO DO:
-1. add more genres to the user input
+1. Make output prettier
 
 USER INPUT FLOW:
 1. choose genre
