@@ -54,24 +54,24 @@ def ask_user_input(genre_list, genre_dict):
 
     match chosen_decade:
         case "1":
-           release_date_gte = "2020-01-01" 
-           release_date_lte = "2040-01-01" 
+           release_date_lte = "2020-01-01" 
+           release_date_gte = "2040-01-01" 
         case "2":
-           release_date_gte = "2010-01-01" 
-           release_date_lte = "2000-01-01" 
+           release_date_lte = "2010-01-01" 
+           release_date_gte = "2000-01-01" 
 
         case "3":
-           release_date_gte = "2000-01-01" 
-           release_date_lte = "1990-01-01" 
-        case "4":
+           release_date_lte = "2000-01-01" 
            release_date_gte = "1990-01-01" 
-           release_date_lte = "1980-01-01" 
-        case "5":
+        case "4":
+           release_date_lte = "1990-01-01" 
            release_date_gte = "1980-01-01" 
-           release_date_lte = "1970-01-01" 
+        case "5":
+           release_date_lte = "1980-01-01" 
+           release_date_gte = "1970-01-01" 
         case "6":
-           release_date_gte = "1950-01-01" 
-           release_date_lte = "1970-01-01" 
+           release_date_lte = "1950-01-01" 
+           release_date_gte = "1970-01-01" 
 
         case _:
             print("Incorrect Input!")
@@ -92,7 +92,8 @@ def get_movie_list(genre_id_list, chosen_rating, release_date_gte, release_date_
     movie_data = [*movie_data, *response["results"]]
     for movie in movie_data:
         movie_dict = {"title": movie["title"], "id": movie["id"], "popularity": movie["popularity"], "release_date": movie["release_date"], "rating": movie["vote_average"], "vote count": movie["vote_count"]}
-        print(movie_dict)
+        print(f"Movie Title: {movie_dict['title']}\nLink: https://www.themoviedb.org/movie/{movie_dict['id']}\n")
+
 
         
 get_genre_list()
@@ -102,6 +103,7 @@ get_genre_list()
 '''
 TO DO:
 1. Make output prettier
+2. Add the direct link to TMDB
 
 USER INPUT FLOW:
 1. choose genre
