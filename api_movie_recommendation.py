@@ -13,11 +13,6 @@ def get_genre_list():
     '''
     all_genres_url = 'https://api.themoviedb.org/3/genre/movie/list?language=en'
 
-    headers = {
-            "accept": "application/json",
-            "Authorization": credentials_file.bearer_token
-    }
-
     response = requests.get(all_genres_url, headers=headers).json()
 
     genre_dict = {genre["name"]: genre["id"] for genre in response["genres"]}
